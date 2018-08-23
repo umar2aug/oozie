@@ -1,0 +1,11 @@
+use test_db;
+
+drop table IF EXISTS test_db.joina;
+
+create table test_db.joina(id int, name string)
+row format delimited
+fields terminated by ',';
+
+load data inpath '/joinA' into table test_db.joinA;
+
+

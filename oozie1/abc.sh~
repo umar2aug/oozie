@@ -1,0 +1,8 @@
+printf "Namenode address\n----------------------\n"
+head -n 5 /etc/hadoop/conf/core-site.xml | tail -n 2
+
+printf "===============================\n\n\n Resource manager address\n------------------\n"
+head -n 260 /etc/hadoop/conf/yarn-site.xml | tail -n 2
+
+
+

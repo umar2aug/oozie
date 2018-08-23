@@ -1,0 +1,48 @@
+<workflow-app xmlns = "uri:oozie:workflow:0.4" name ="wf_5">
+
+
+	<global>
+         	<job-tracker>${resourceManager}</job-tracker>
+         	<name-node>${nameNode}</name-node>
+            	<configuration>
+                	<property>
+                    		<name>oozie.hive.defaults</name>
+                    		<value>/xml/hive-site.xml</value>
+                	</property>
+            	</configuration>
+	</global>
+
+	<start to = "CHECK_FILE"/>
+
+	<decision name="CHECK_FILE">
+     		<switch>
+        		<case to="HIVE">
+          			${fs:exists("/user/hue/oozie_wf5/emp.csv")}
+        		</case>
+        		<default to="ENQUEUE" />
+     		</switch>
+	</decision>
+
+	<action name="ENQUEUE">
+ 		<shell xmlns="uri:oozie:shell-action:0.3">
+ 		<exec>enqueue.sh</exec>
+ 		<file>/user/hue/oozie_wf5/enqueue.sh</file>
+ 		</shell>
+        	<ok to="HIVE"/>
+        	<error to="KILL"/>
+	</action>
+
+	<action name = "HIVE">
+      		<hive xmlns = "uri:oozie:hive-action:0.4">
+            	<script>hive.hive</script>
+        	</hive>
+        	<ok to="END"/>
+        	<error to="KILL"/>
+	</action>
+
+	<kill name = "KILL">
+      		<message>Job failed</message>
+   	</kill>
+	
+   	<end name = "END"/>
+</workflow-app>

@@ -1,0 +1,11 @@
+use test_db;
+
+drop table IF EXISTS test_db.joinb;
+
+create table test_db.joinb(id int, location string)
+row format delimited
+fields terminated by ',';
+
+load data inpath '/joinB' into table test_db.joinB;
+
+

@@ -1,0 +1,27 @@
+use test_db;
+
+DROP TABLE IF EXISTS temperature;
+
+CREATE TABLE temperature(year INT, city STRING, temp INT)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ',';
+
+LOAD DATA INPATH '/user/hue/oozie_wf5/emp.csv' INTO TABLE temperature;
+
+INSERT OVERWRITE DIRECTORY '/user/hue/oozie_wf5/output.csv'
+SELECT year, MAX(temp)
+FROM temperature
+GROUP BY year;
+
+
+
+
+
+
+
+
+
+
+
+
+

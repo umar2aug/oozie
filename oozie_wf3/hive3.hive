@@ -1,0 +1,16 @@
+use test_db;
+
+drop table IF EXISTS test_db.joinc;
+
+create table test_db.joinc(id int, name string, location string)
+row format delimited
+fields terminated by ',';
+
+INSERT OVERWRITE TABLE test_db.joinc
+SELECT a.id,a.name,b.location
+FROM test_db.joina a
+JOIN test_db.joinb b
+ON (a.id=b.id);
+
+
+

@@ -1,0 +1,52 @@
+<workflow-app xmlns = "uri:oozie:workflow:0.4" name ="wf_3">
+
+	<global>
+         	<job-tracker>${resourceManager}</job-tracker>
+         	<name-node>${nameNode}</name-node>
+            	<configuration>
+                	<property>
+                    		<name>oozie.hive.defaults</name>
+                    		<value>/xml/hive-site.xml</value>
+                	</property>
+            	</configuration>
+	</global>
+		
+	<start to = "FORK"/>
+
+	<fork name="FORK">
+        	<path start="HIVE_1"/>
+        	<path start="HIVE_2"/>
+ 	</fork>
+    
+	<action name = "HIVE_1">
+      		<hive xmlns = "uri:oozie:hive-action:0.4"> 
+            	<script>hive1.hive</script>
+        	</hive>
+        	<ok to="JOIN"/>
+        	<error to="KILL"/>
+	</action>
+
+	<action name = "HIVE_2">
+      		<hive xmlns = "uri:oozie:hive-action:0.4">
+            	<script>hive2.hive</script>
+        	</hive>
+        	<ok to="JOIN"/>
+        	<error to="KILL"/>
+	</action>
+
+	<join name="JOIN" to ="HIVE_3"/>
+
+	<action name = "HIVE_3">
+      		<hive xmlns = "uri:oozie:hive-action:0.4">
+            	<script>hive3.hive</script>
+        	</hive>
+        	<ok to="END"/>
+        	<error to="KILL"/>
+	</action>
+
+	<kill name = "KILL">
+      		<message>Job failed</message>
+   	</kill>
+	
+   	<end name = "END"/>
+</workflow-app>

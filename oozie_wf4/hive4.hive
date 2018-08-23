@@ -1,0 +1,2 @@
+INSERT OVERWRITE DIRECTORY '/user/hue/oozie_wf4/output.csv'
+SELECT * FROM test_db.joinc;

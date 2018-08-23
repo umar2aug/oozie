@@ -1,0 +1,30 @@
+<workflow-app xmlns = "uri:oozie:workflow:0.4" name ="workflow1">
+   <start to = "hive_query1"/>
+   	<action name = "hive_query1">
+      		<hive xmlns = "uri:oozie:hive-action:0.4">
+         	<job-tracker>192.168.220.156:8050</job-tracker>
+         	<name-node>hdfs://192.168.220.156:8020</name-node>
+         	<prepare>
+                <delete path="/oozie_test"/>
+            </prepare>
+            <configuration>
+                <property>
+                    <name>oozie.hive.defaults</name>
+                    <value>/oozie1/hive-site.xml</value>
+                </property>
+            </configuration>
+            <script>/oozie1/hive_query1.hive</script>
+        </hive>
+		
+      		<ok to = "end"/>
+      		<error to = "kill_job"/>
+   </action>
+
+  
+   <kill name = "kill_job">
+      <message>Job failed</message>
+   </kill>
+	
+   <end name = "end"/>
+
+</workflow-app>
